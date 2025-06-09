@@ -1,7 +1,12 @@
 const express = require('express');
 const session = require('express-session');
+const express = require('jsonwebtoken')
+const bodyPaser = require('body-parser');
+const bodyParser = require('body-parser');
+
 
 const app = express();
+app.use(bodyParser.json())
 
 // Middleware to set up session management
 app.use(session({
@@ -22,7 +27,18 @@ app.post('/login', (req, res) =>{
   } else{
     res.send('Invalid credentials')
   }
+
+
+    // JWT
+  if (username === 'user' && password === 'password'){
+    // Generate JWT with username payload
+    const token = JsonWebTokenError.sign({username}, scretKey, {expiresIn: '1hr'})
+    res.send('Invide credentials')
+  }
+
 })
+
+
 
 // Get endpoint for accessing dashboard
 app.get('/dashboard', (req, res) =>{
@@ -31,8 +47,24 @@ app.get('/dashboard', (req, res) =>{
   }else {
     res.send('Please login first')
   }
-})
 
+  // Get token from authorization header
+  const token = req.headers['authorization'];
+
+  if(token){
+    // verify JWT token
+    jwt.verify(token, secretKey, (err, decoded) =>{
+      if(err){
+        res.send('Invalid token')
+      }else{
+        // Token is valid, send welcome message with username
+        res.send(`Welcome ${decoded.username}`);
+      }
+    });
+     }else{
+      res.send('token missing');
+     }
+})
 
 // Start the server on poer 3000
 app.listen(3000, ()=> console.log('Server is running on port 3000'))
