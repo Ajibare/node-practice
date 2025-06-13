@@ -1,3 +1,5 @@
 ﻿# node-practice
 # fetching of api from 'https://apipheny.io/free-api/'
 #Unable ti fetch some ....
+
+# check for the Weather APIs in order to fetc the data
